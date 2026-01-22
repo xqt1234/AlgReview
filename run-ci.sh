@@ -98,7 +98,7 @@ cd ..
 
 # 2. 运行测试
 echo "🧪 运行单元测试..."
-"$BIN_DIR/$TEST_BIN" --gtest_output=xml:test_results.xml
+"$BIN_DIR/$TEST_BIN"
 
 # 3. 内存检查
 echo "🛡️  内存泄漏检查..."
