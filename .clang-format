@@ -1,0 +1,6 @@
+# .clang-format 文件内容示例
+BasedOnStyle: WebKit  # 基础风格
+IndentWidth: 4
+UseTab: Never
+BreakBeforeBraces: Allman  # 大括号换行，类似：if (condition)\n{
+ColumnLimit: 0  # 不限制行宽

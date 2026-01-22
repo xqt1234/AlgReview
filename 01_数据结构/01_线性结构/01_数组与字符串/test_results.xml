@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites tests="10" failures="0" disabled="0" errors="0" time="0." timestamp="2026-01-22T17:30:39.190" name="AllTests">
+  <testsuite name="vectorTest" tests="10" failures="0" disabled="0" skipped="0" errors="0" time="0." timestamp="2026-01-22T17:30:39.190">
+    <testcase name="测试默认构造" file="/home/xiongqitao.linux/gitcode/AlgReview/01_数据结构/01_线性结构/01_数组与字符串/tests/test_vector.cpp" line="11" status="run" result="completed" time="0." timestamp="2026-01-22T17:30:39.190" classname="vectorTest" />
+    <testcase name="测试列表构造" file="/home/xiongqitao.linux/gitcode/AlgReview/01_数据结构/01_线性结构/01_数组与字符串/tests/test_vector.cpp" line="17" status="run" result="completed" time="0." timestamp="2026-01-22T17:30:39.190" classname="vectorTest" />
+    <testcase name="测试拷贝构造" file="/home/xiongqitao.linux/gitcode/AlgReview/01_数据结构/01_线性结构/01_数组与字符串/tests/test_vector.cpp" line="24" status="run" result="completed" time="0." timestamp="2026-01-22T17:30:39.190" classname="vectorTest" />
+    <testcase name="测试移动构造" file="/home/xiongqitao.linux/gitcode/AlgReview/01_数据结构/01_线性结构/01_数组与字符串/tests/test_vector.cpp" line="36" status="run" result="completed" time="0." timestamp="2026-01-22T17:30:39.190" classname="vectorTest" />
+    <testcase name="测试属性" file="/home/xiongqitao.linux/gitcode/AlgReview/01_数据结构/01_线性结构/01_数组与字符串/tests/test_vector.cpp" line="45" status="run" result="completed" time="0." timestamp="2026-01-22T17:30:39.190" classname="vectorTest" />
+    <testcase name="测试修改预设空间大小reserve" file="/home/xiongqitao.linux/gitcode/AlgReview/01_数据结构/01_线性结构/01_数组与字符串/tests/test_vector.cpp" line="54" status="run" result="completed" time="0." timestamp="2026-01-22T17:30:39.190" classname="vectorTest" />
+    <testcase name="测试修改元素个数resize" file="/home/xiongqitao.linux/gitcode/AlgReview/01_数据结构/01_线性结构/01_数组与字符串/tests/test_vector.cpp" line="62" status="run" result="completed" time="0." timestamp="2026-01-22T17:30:39.190" classname="vectorTest" />
+    <testcase name="添加元素" file="/home/xiongqitao.linux/gitcode/AlgReview/01_数据结构/01_线性结构/01_数组与字符串/tests/test_vector.cpp" line="70" status="run" result="completed" time="0." timestamp="2026-01-22T17:30:39.190" classname="vectorTest" />
+    <testcase name="移除某个位置元素" file="/home/xiongqitao.linux/gitcode/AlgReview/01_数据结构/01_线性结构/01_数组与字符串/tests/test_vector.cpp" line="77" status="run" result="completed" time="0." timestamp="2026-01-22T17:30:39.190" classname="vectorTest" />
+    <testcase name="获取元素" file="/home/xiongqitao.linux/gitcode/AlgReview/01_数据结构/01_线性结构/01_数组与字符串/tests/test_vector.cpp" line="87" status="run" result="completed" time="0." timestamp="2026-01-22T17:30:39.190" classname="vectorTest" />
+  </testsuite>
+</testsuites>

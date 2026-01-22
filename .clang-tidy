@@ -1,0 +1,19 @@
+# .clang-tidy
+Checks: >
+    -*,
+    clang-analyzer-*,
+    modernize-*,
+    performance-*,
+    readability-*,
+    -readability-magic-numbers, # 禁用魔法数字检查
+    -cppcoreguidelines-avoid-magic-numbers,
+    -readability-identifier-length, # 禁用长度检查
+    -modernize-use-trailing-return-type
+HeaderFilterRegex: ''
+CheckOptions:
+  - key: readability-identifier-length.MinimumVariableNameLength
+    value: '1'
+  - key: readability-identifier-length.MinimumParameterNameLength  
+    value: '1'
+WarningsAsErrors: ''
+FormatStyle: none
