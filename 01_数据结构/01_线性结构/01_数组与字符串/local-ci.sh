@@ -16,5 +16,5 @@ while [[ "$current" != "/" ]]; do
     current="$(dirname "$current")"
 done
 
-echo "错误: 未找到 scripts/run-ci.sh" >&2
+echo "错误: 未找到 run-ci.sh" >&2
 exit 1

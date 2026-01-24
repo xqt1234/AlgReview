@@ -1,6 +1,9 @@
 #pragma once
 #include <iostream>
 #include <vector>
+/**
+ * 基础版本
+ */
 template <typename T>
 class Vector
 {
@@ -81,9 +84,9 @@ public:
             clear();
             return;
         }
-        while (size > m_capacity)
+        if (size > m_capacity)
         {
-            reallocate(m_capacity * 2);
+            reallocate(size);
         }
         if (size > m_size)
         {
@@ -125,7 +128,6 @@ public:
             m_data[i] = std::move(m_data[i + 1]);
         }
         m_size--;
-        m_data[m_size].~T();
     }
     auto back() -> const T&
     {
@@ -158,6 +160,7 @@ private:
         ::operator delete(m_data);
         m_data = tmpdata;
         m_capacity = size;
+        m_size = movesize;
     }
     void swap(Vector& src) noexcept
     {
