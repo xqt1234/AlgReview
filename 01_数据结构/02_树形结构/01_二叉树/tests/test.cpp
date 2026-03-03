@@ -94,6 +94,7 @@ int main()
     tf.insert(15);
     tf.insert(22);
     tf.insert(28);
+    std::cout << "层高是: " << tf.getHeightPro() << " " << tf.getHeight() << std::endl;
     tf.order_show(BinaryTreeI<int>::showType::PreOrder);
     tf.order_show(BinaryTreeI<int>::showType::InOrder);
     tf.order_show(BinaryTreeI<int>::showType::PostOrder);

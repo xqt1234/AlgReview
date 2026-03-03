@@ -1,48 +1,16 @@
-#include <iostream>
-#include <random>
-#include <vector>
 #include <cmath>
 #include <functional>
-#include <stack>
+#include <iostream>
 #include <queue>
+#include <random>
+#include <stack>
+#include <vector>
 /**
- * 简单复习，表达原理即可，不详细实现每个功能,迭代版本
- * 一、普通二叉树（Binary Tree）应该实现的功能
-普通二叉树的核心是结构 + 遍历，不要求节点值有序，所以功能围绕“树形”和“访问顺序”展开。
-1. 结构相关
-节点定义：Node包含 data、left、right。
-构造与析构：
-构造函数初始化空树。
-析构函数用层序或递归释放所有节点（防止内存泄漏）。
-2. 插入方式（普通二叉树特有）
-层序插入（自动找第一个空位）：
-从左到右、从上到下填满树，构造完全二叉树或近似完全二叉树。
-（可选）按位置插入：手动指定父节点和左右方向，但要检查位置是否为空。
-3. 遍历（核心考点）
-递归遍历：
-前序（根 → 左 → 右）
-中序（左 → 根 → 右）
-后序（左 → 右 → 根）
-迭代遍历：
-前序（栈）
-中序（栈）
-后序（双栈法或标记法）
-层序遍历（队列）
-4. 属性计算
-判空 isEmpty()
-节点数 getSize()
-高度 getHeight()（递归或层序）
-叶子节点数 getLeafCount()
-（可选）第 k 层节点数
-5. 其他辅助
-根据前序+中序 / 中序+后序 重建树（经典面试题）
-判断两棵树是否相同、是否镜像
-判断是否为完全二叉树
+ * 二叉搜索树阶段​
+ * 完成：BST 的插入、查找、删除、区间查找、验证 BST、找第 K 小等。
  */
-//grep -n "^\s*\(void\|bool\|int\|T\|Node\*\)\s\+\w\+.*)" your_file.cpp | grep -v "^\s*//"
-
-template <typename T,typename Comp = std::greater<T>>
-class BinaryTreeI
+template <typename T, typename Comp = std::greater<T>>
+class BinaryTree
 {
 public:
     struct Node
@@ -50,7 +18,10 @@ public:
         T m_data;
         Node* m_left;
         Node* m_right;
-        Node(T val):m_data(val),m_left(nullptr),m_right(nullptr)
+        Node(T val)
+            : m_data(val)
+            , m_left(nullptr)
+            , m_right(nullptr)
         {
         }
     };
@@ -62,72 +33,158 @@ public:
         LevelOrder,
     };
 private:
-    Node* m_root{nullptr};
-    int m_size{0};
+    Node* m_root { nullptr };
+    int m_size { 0 };
+    Comp m_comp;
+
 public:
     // 构造函数和析构函数
-    BinaryTreeI()
+    BinaryTree()
     {
     }
-    ~BinaryTreeI()
+    ~BinaryTree()
     {
-        if(m_root == nullptr)
+        if (m_root == nullptr)
         {
             return;
         }
         std::queue<Node*> st;
         st.push(m_root);
-        while(!st.empty())
+        while (!st.empty())
         {
             Node* node = st.front();
             st.pop();
-            if(node->m_left)
+            if (node->m_left)
             {
                 st.push(node->m_left);
             }
-            if(node->m_right)
+            if (node->m_right)
             {
                 st.push(node->m_right);
             }
             delete node;
         }
     }
-    Node* getRoot() const { return m_root; }
+    Node* getRoot()
+    {
+        return m_root;
+    }
     void insert(const T& val)
     {
-        if(m_root == nullptr)
+        if (m_root == nullptr)
         {
             m_root = new Node(val);
-            m_size++;
             return;
         }
-        std::queue<Node*> st;
-        st.push(m_root);
-        while(!st.empty())
+        Node* cur = m_root;
+        Node* p = nullptr;
+        while (cur != nullptr)
         {
-            Node* node = st.front();
-            st.pop();
-            if(node->m_left == nullptr)
+            if (m_comp(cur->m_data, val))
             {
-                node->m_left = new Node(val);
-                m_size++;
-                return;
-            }else
-            {
-                st.push(node->m_left);
+                p = cur;
+                cur = cur->m_left;
             }
-            if(node->m_right == nullptr)
+            else if (cur->m_data == val)
             {
-                node->m_right = new Node(val);
-                m_size++;
                 return;
-            }else
+            }
+            else
             {
-                st.push(node->m_right);
+                p = cur;
+                cur = cur->m_right;
             }
         }
+        if (m_comp(p->m_data, val))
+        {
+            p->m_left = new Node(val);
+        }
+        else
+        {
+            p->m_right = new Node(val);
+        }
+        m_size++;
     }
 
+    bool search(const T& val)
+    {
+        Node* p = m_root;
+        while (p != nullptr)
+        {
+            if (p->m_data == val)
+            {
+                return true;
+            }
+            if (m_comp(p->m_data, val))
+            {
+                p = p->m_left;
+            }
+            else
+            {
+                p = p->m_right;
+            }
+        }
+        return false;
+    }
+    void remove(const T& val)
+    {
+        Node* cur = m_root;
+        Node* p = nullptr;
+        while (cur != nullptr)
+        {
+            if(cur->m_data == val)
+            {
+                break;
+            }
+            p = cur;
+            if (m_comp(cur->m_data, val))
+            {
+                cur = cur->m_left;
+            }
+            else
+            {
+                cur = cur->m_right;
+            }
+        }
+        if(cur == nullptr)
+        {
+            return;
+        }
+        // 找前驱节点，把cur的值设置为前驱节点的值，p为前驱节点的父节点，cur为前驱节点，
+        if (cur->m_left != nullptr && cur->m_right != nullptr)
+        {
+            Node* node = cur->m_left;
+            Node* pre = cur;
+            while (node->m_right != nullptr)
+            {
+                pre = node;
+                node = node->m_right;
+            }
+            cur->m_data = node->m_data;
+            cur = node;
+            p = pre;
+        }
+        // 此时，只可能是只剩左边节点，或者只剩右边节点，或者是叶子节点
+        // 拿到子节点之后，看p的左节点是cur还是有节点是cur
+        Node* child = cur->m_left;
+        if (child == nullptr)
+        {
+            child = cur->m_right;
+        }
+        if(p == nullptr)
+        {
+            m_root = child;
+        }else if(p->m_left == cur)
+        {
+            p->m_left = child;
+        }else
+        {
+            p->m_right = child;
+        }
+        delete cur;
+        m_size--;
+        
+    }
     std::vector<T> preorder()
     {
         std::vector<T> res;
@@ -246,28 +303,28 @@ public:
     {
         // 双栈法
         std::cout << "后序遍历 ";
-        if(m_root == nullptr)
+        if (m_root == nullptr)
         {
             return;
         }
         std::stack<Node*> st;
         std::stack<Node*> res;
         st.push(m_root);
-        while(!st.empty())
+        while (!st.empty())
         {
             Node* node = st.top();
             st.pop();
             res.push(node);
-            if(node->m_left != nullptr)
+            if (node->m_left != nullptr)
             {
                 st.push(node->m_left);
             }
-            if(node->m_right != nullptr)
+            if (node->m_right != nullptr)
             {
                 st.push(node->m_right);
             }
         }
-        while(!res.empty())
+        while (!res.empty())
         {
             Node* node = res.top();
             res.pop();
@@ -303,7 +360,7 @@ public:
     // 获取属性
     bool isEmpty()
     {
-        return m_size== 0;
+        return m_size == 0;
     }
     int getSize()
     {
@@ -311,25 +368,25 @@ public:
     }
     int getHeight()
     {
-        if(m_root == nullptr)
+        if (m_root == nullptr)
         {
             return 0;
         }
         std::queue<Node*> st;
         st.push(m_root);
         int res = 0;
-        while(!st.empty())
+        while (!st.empty())
         {
             int n = st.size();
-            for(int i = 0;i < n;++i)
+            for (int i = 0; i < n; ++i)
             {
                 Node* node = st.front();
                 st.pop();
-                if(node->m_left)
+                if (node->m_left)
                 {
                     st.push(node->m_left);
                 }
-                if(node->m_right)
+                if (node->m_right)
                 {
                     st.push(node->m_right);
                 }
@@ -338,115 +395,60 @@ public:
         }
         return res;
     }
-    int getHeightPro()
-    {
-        return getHeightPro(m_root);
-    }
-    int getHeightPro(Node* node)
-    {
-        if(node == nullptr)
-        {
-            return 0;
-        }
-        int leftheight = getHeightPro(node->m_left);
-        int rightheight = getHeightPro(node->m_right);
-        return (leftheight > rightheight ? leftheight : rightheight) + 1;
-    }
     int getLeafCount()
     {
-        if(m_root == nullptr)
+        if (m_root == nullptr)
         {
             return 0;
         }
         std::queue<Node*> q;
         q.push(m_root);
         int res = 0;
-        while(!q.empty())
+        while (!q.empty())
         {
             Node* node = q.front();
             q.pop();
-            if(node->m_left != nullptr)
+            if (node->m_left != nullptr)
             {
                 q.push(node->m_left);
             }
-            if(node->m_right != nullptr)
+            if (node->m_right != nullptr)
             {
                 q.push(node->m_right);
             }
-            if(node->m_left == nullptr && node->m_right == nullptr)
+            if (node->m_left == nullptr && node->m_right == nullptr)
             {
-                res ++;
+                res++;
             }
         }
         return res;
     }
-    void preorder_r()
+    
+    // 求满足区间的元素值[i,j]实现
+    void findValues(std::vector<T>& vec, const T& i, const T& j)
     {
-        std::cout << "先序遍历 ";
-        preorder_r(m_root);
-        std::cout << std::endl;
+        findValues(m_root, vec, i, j);
     }
-    void inorder_r()
+
+private:
+    void findValues(Node* node, std::vector<T>& vec, const T& i, const T& j)
     {
-        std::cout << "中序遍历 ";
-        inorder_r(m_root);
-        std::cout << std::endl;
-    }
-    void postorder_r()
-    {
-        std::cout << "后序遍历 ";
-        postorder_r(m_root);
-        std::cout << std::endl;
+        if (node == nullptr)
+        {
+            return;
+        }
+        if (m_comp(node->m_data, i))
+        {
+            findValues(node->m_left, vec, i, j);
+        }
+        if (!m_comp(i, node->m_data) && !m_comp(node->m_data, j))
+        {
+            vec.push_back(node->m_data);
+        }
+        if (m_comp(j, node->m_data))
+        {
+            findValues(node->m_right, vec, i, j);
+        }
     }
     
-private:
-    void inorder_r(Node* node)
-    {
-        if(node != nullptr)
-        {
-            inorder_r(node->m_left);
-            std::cout << node->m_data << " ";
-            inorder_r(node->m_right);
-        }
-    }
-    void preorder_r(Node* node)
-    {
-        if(node != nullptr)
-        {
-            std::cout << node->m_data << " ";
-            preorder_r(node->m_left);
-            preorder_r(node->m_right);
-        }
-    }
-    void postorder_r(Node* node)
-    {
-        if(node != nullptr)
-        {
-            postorder_r(node->m_left);
-            postorder_r(node->m_right);
-            std::cout << node->m_data << " ";
-        }
-    }
 };
-// // ------------二叉树经典题目
-// int main()
-// {
-//     BinaryTreeI<int> mytree;
-//     mytree.insert(20);
-//     mytree.insert(10);
-//     mytree.insert(25);
-//     mytree.insert(6);
-//     mytree.insert(15);
-//     mytree.insert(22);
-//     mytree.insert(28);
-//     mytree.preorder();
-//     mytree.preorder_r();
-//     mytree.inorder();
-//     mytree.inorder_r();
-//     mytree.postorder();
-//     mytree.postorder_t();
-//     mytree.postorder_r();
-//     mytree.levelOrder();
-//     std::cout << std::endl;
-//     return 0;
-// }
