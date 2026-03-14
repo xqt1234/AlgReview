@@ -74,6 +74,7 @@ public:
         if (m_root == nullptr)
         {
             m_root = new Node(val);
+            m_size++;
             return;
         }
         Node* cur = m_root;

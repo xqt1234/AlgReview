@@ -1,0 +1,84 @@
+#include "rb_tree_problems.h"
+#include <iostream>
+#include <stack>
+template <typename T>
+void show(RBTree<T>& pTree)
+{
+    typename RBTree<T>::Node* root = pTree.getRoot();
+    if(root == nullptr)
+    {
+        return;
+    }
+    std::queue<typename RBTree<T>::Node*> que;
+    que.push(root);
+    while (!que.empty())
+    {
+        int n = que.size();
+        for (int i = 0; i < n; ++i)
+        {
+            typename RBTree<T>::Node* node = que.front();
+            que.pop();
+            std::cout << node->m_data;
+            if(node->m_color == RBTree<T>::Color::Red)
+            {
+                std::cout << "红"  << " ";
+            }else
+            {
+                std::cout << "黑"  << " ";
+            }
+            
+            if (node->m_left)
+            {
+                que.push(node->m_left);
+            }
+            if (node->m_right)
+            {
+                que.push(node->m_right);
+            }
+        }
+        std::cout << std::endl;
+    }
+    std::cout << std::endl;
+}
+
+int main()
+{
+    RBTree<int> rbt;
+    rbt.insert(1);
+    rbt.insert(2);
+    rbt.insert(3);
+    rbt.insert(4);
+    rbt.insert(5);
+    rbt.insert(6);
+    rbt.insert(7);
+    rbt.insert(8);
+    rbt.insert(9);
+    rbt.insert(10);
+    show(rbt);
+    rbt.remove(1);
+    rbt.remove(2);
+    rbt.remove(3);
+    rbt.remove(4);
+    rbt.remove(5);
+    rbt.remove(6);
+    show(rbt);
+    rbt.remove(7);
+    rbt.remove(8);
+    rbt.remove(9);
+    rbt.remove(10);
+    // avl.insert(1);
+    // avl.insert(2);
+    // avl.insert(3);
+    // avl.insert(4);
+    // avl.insert(5);
+    // avl.insert(6);
+    // avl.insert(7);
+    // avl.insert(8);
+    // avl.insert(9);
+    // avl.insert(10);
+    // show(avl);
+    // avl.remove(10);
+    // avl.remove(9);
+    show(rbt);
+    return 0;
+}
